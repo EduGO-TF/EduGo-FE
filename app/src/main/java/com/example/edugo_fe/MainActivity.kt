@@ -2,6 +2,7 @@ package com.example.edugo_fe
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
@@ -10,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.edugo_fe.databinding.ActivityMainBinding
+import com.kakao.sdk.common.util.Utility
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -50,6 +52,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        var keyHash = Utility.getKeyHash(this)
+        Log.i("gunheu", "keyHash : $keyHash")
     }
 
     private fun setCharacterStartPosition(character: View, screenWidth: Int, screenHeight: Int) {
