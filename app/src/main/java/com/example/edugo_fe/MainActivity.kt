@@ -1,6 +1,7 @@
 package com.example.edugo_fe
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
@@ -22,6 +23,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val mainLayout = binding.mainLayout
+
+//         AR Button 누를 시 activity 이동
+        binding.mArButton.setOnClickListener {
+            moveArActivity()
+        }
 
         // Set up background
         mainLayout.setBackgroundResource(R.drawable.bg_sky_and_ground) // Replace with your drawable
@@ -50,6 +56,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun moveArActivity() {
+        startActivity(Intent(this, ArActivity::class.java))
     }
 
     private fun setCharacterStartPosition(character: View, screenWidth: Int, screenHeight: Int) {
