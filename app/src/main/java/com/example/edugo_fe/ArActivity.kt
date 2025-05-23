@@ -1,6 +1,7 @@
 package com.example.edugo_fe
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -102,13 +103,28 @@ class ArActivity : AppCompatActivity() {
 
     }
 
+    private fun moveToStory(){
+        val intent = Intent(this@ArActivity, StoryActivity::class.java)
+        intent.putExtra("MODEL_NAME", "richie") // 필요한 데이터를 전달
+        startActivity(intent)
+    }
+
     private fun addAnchorNode(anchor: Anchor) {
         sceneView.addChildNode(
             AnchorNode(sceneView.engine, anchor)
                 .apply {
                     isEditable = true
                     lifecycleScope.launch {
-                        buildModelNode()?.let { addChildNode(it) }
+                        buildModelNode()?.let { modelNode ->
+                            // 1. ModelNode 클릭 리스너 추가
+                            modelNode.onTouch = {motionEvent, hitResult ->
+                                val intent = Intent(this@ArActivity, StoryActivity::class.java)
+                                startActivity(intent)
+                                Log.d("Activityarar", "on Touch!!!!")
+                                true
+                            }
+                            addChildNode(modelNode)
+                        }
                     }
                     anchorNode = this
                 }
@@ -117,7 +133,7 @@ class ArActivity : AppCompatActivity() {
 
     suspend fun buildModelNode(): ModelNode? {
         sceneView.modelLoader.loadModelInstance(
-            "https://sceneview.github.io/assets/models/Spoons.glb"
+            "https://edugo-tf.github.io/EduGo-FE/assets/models/richie.glb"
         )?.let { modelInstance ->
             return ModelNode(
                 modelInstance = modelInstance,
