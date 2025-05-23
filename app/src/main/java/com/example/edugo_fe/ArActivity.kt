@@ -117,7 +117,7 @@ class ArActivity : AppCompatActivity() {
 
     suspend fun buildModelNode(): ModelNode? {
         sceneView.modelLoader.loadModelInstance(
-            "assets/models/richie.glb"
+            "https://github.com/EduGO-TF/EduGo-FE/blob/d269c09145f0e928a809006d2d5781f9ced1c5d8/app/src/main/assets/models/richie.glb"
         )?.let { modelInstance ->
             return ModelNode(
                 modelInstance = modelInstance,
