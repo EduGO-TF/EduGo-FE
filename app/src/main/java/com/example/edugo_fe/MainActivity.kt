@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         mainLayout.setBackgroundResource(R.drawable.bg_sky_and_ground) // Replace with your drawable
 
         val character = ImageView(this).apply {
-            setImageResource(R.drawable.gingerbread) // Replace with your character drawable
+            setImageResource(R.drawable.cookie_character) // Replace with your character drawable
             layoutParams = ConstraintLayout.LayoutParams(300, 300) // Character size
         }
         mainLayout.addView(character)

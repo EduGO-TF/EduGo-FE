@@ -7,20 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".SplashActivity">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/logo_image"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:src="@drawable/cookie_logo"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+    <ImageView
+        android:id="@+id/logo_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cookie_logo"
+        android:layout_marginTop="300dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/logo_text"/>
 
     <ImageView
         android:id="@+id/logo_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/text_logo"
+        android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
