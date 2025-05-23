@@ -105,7 +105,7 @@ class ArActivity : AppCompatActivity() {
 
     private fun moveToStory(){
         val intent = Intent(this@ArActivity, StoryActivity::class.java)
-        intent.putExtra("MODEL_NAME", "richie") // 필요한 데이터를 전달
+        intent.putExtra("MODEL_NAME", "gingerbread") // 필요한 데이터를 전달
         startActivity(intent)
     }
 
@@ -133,12 +133,12 @@ class ArActivity : AppCompatActivity() {
 
     suspend fun buildModelNode(): ModelNode? {
         sceneView.modelLoader.loadModelInstance(
-            "https://edugo-tf.github.io/EduGo-FE/assets/models/richie.glb"
+            "https://edugo-tf.github.io/EduGo-FE/assets/models/gingerbread_man.glb"
         )?.let { modelInstance ->
             return ModelNode(
                 modelInstance = modelInstance,
                 // Scale to fit in a 0.5 meters cube
-                scaleToUnits = 0.5f,
+                scaleToUnits = 0.7f,
                 // Bottom origin instead of center so the model base is on floor
                 centerOrigin = Position(y = -0.5f)
             ).apply {
