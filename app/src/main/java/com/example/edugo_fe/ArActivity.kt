@@ -40,7 +40,7 @@ class ArActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityArBinding
 
-    var anchorNode: AnchorNode? = null
+    private var anchorNode: AnchorNode? = null
         set(value) {
             if (field != value) {
                 field = value
@@ -50,7 +50,7 @@ class ArActivity : AppCompatActivity() {
 
     var anchorNodeView: View? = null
 
-    var trackingFailureReason: TrackingFailureReason? = null
+    private var trackingFailureReason: TrackingFailureReason? = null
         set(value) {
             if (field != value) {
                 field = value
@@ -58,7 +58,7 @@ class ArActivity : AppCompatActivity() {
             }
         }
 
-    fun updateInstructions() {
+    private fun updateInstructions() {
         instructionText.text = trackingFailureReason?.let {
             it.getDescription(this)
         } ?: if (anchorNode == null) {
@@ -118,9 +118,7 @@ class ArActivity : AppCompatActivity() {
                         buildModelNode()?.let { modelNode ->
                             // 1. ModelNode 클릭 리스너 추가
                             modelNode.onTouch = {motionEvent, hitResult ->
-                                val intent = Intent(this@ArActivity, StoryActivity::class.java)
-                                startActivity(intent)
-                                Log.d("Activityarar", "on Touch!!!!")
+                                moveToStory()
                                 true
                             }
                             addChildNode(modelNode)
@@ -131,7 +129,7 @@ class ArActivity : AppCompatActivity() {
         )
     }
 
-    suspend fun buildModelNode(): ModelNode? {
+    private suspend fun buildModelNode(): ModelNode? {
         sceneView.modelLoader.loadModelInstance(
             "https://edugo-tf.github.io/EduGo-FE/assets/models/gingerbread_man.glb"
         )?.let { modelInstance ->
