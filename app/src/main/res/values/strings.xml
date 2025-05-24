@@ -1,5 +1,23 @@
 <resources>
     <string name="app_name">Edugo_FE</string>
+    <string name="change_model">Change Model</string>
+    <string name="instant_placement">Instant Placement</string>
+    <string name="depth_placement">Depth Placement</string>
+    <string name="plane_placement">Plane Placement</string>
+    <string name="best_placement">Best Placement</string>
+    <string name="point_your_phone_down">Point your phone down at an empty space, and move it around slowly</string>
+    <string name="sceneview_tap_on_surface">Tap on a surface to place an object.</string>
+    <string name="sceneview_insufficient_features_message">Can\'t find anything.\nAim device at a surface with more texture or color.</string>
+    <string name="sceneview_excessive_motion_message">Moving too fast.\nSlow down</string>
+    <string name="sceneview_insufficient_light_message">Too dark.\nTry moving to a well-lit area.</string>
+    <string name="sceneview_insufficient_light_android_s_message">Too dark. Try moving to a well-lit area.\nAlso, make sure the Block Camera is set to off in system settings.</string>
+    <string name="sceneview_bad_state_message">Tracking lost due to bad internal state.\nPlease try restarting the AR experience.</string>
+    <string name="sceneview_camera_unavailable_message">Another app is using the camera.\nTap on this app or try closing the other one.</string>
+    <string name="sceneview_unknown_tracking_failure">Unknown tracking failure reason: %1$s</string>
+    <string name="sceneview_camera_permission_required">Camera permission required</string>
+    <string name="tap_anywhere_to_add_model">Tap anywhere to add model</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="start_ment">쿠키가 안전하게\n모험을 떠날 수 있게 도와주세요</string>
+
 </resources>

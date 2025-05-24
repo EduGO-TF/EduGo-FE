@@ -1,30 +1,34 @@
-package com.example.edugo_fe
+package com.example.edugo_fe.Login
 
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import com.example.edugo_fe.R
 import com.example.edugo_fe.databinding.ActivityLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var binding: ActivityLoginBinding
+    private lateinit var binding :ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
 
+        enableEdgeToEdge()
         setContentView(binding.root)
 
-        val loginButton = binding.loginButton
-        loginButton.setOnClickListener{
-            loginWithKakao()
-        }
+        setFragment(LoginMainFragment())
     }
 
+    private fun setFragment(frag: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, frag)
+            .setReorderingAllowed(true)
+            .addToBackStack("")
+    }
     private fun loginWithKakao(){
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
             // 카톡을 통한 로그인
