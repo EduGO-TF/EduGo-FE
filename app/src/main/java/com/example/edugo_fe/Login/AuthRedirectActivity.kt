@@ -40,12 +40,11 @@ class AuthRedirectActivity: AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
+            Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "토큰 수신 실패", Toast.LENGTH_SHORT).show()
             finish()
         }
-
-        Log.d("Activityarar", uri.toString())
     }
 
 }

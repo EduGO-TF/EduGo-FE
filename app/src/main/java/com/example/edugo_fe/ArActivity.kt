@@ -1,23 +1,14 @@
 package com.example.edugo_fe
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.edugo_fe.databinding.ActivityArBinding
 import com.google.android.filament.View
 import com.google.ar.core.Anchor
-import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Config
 import com.google.ar.core.Plane
 import com.google.ar.core.Session
@@ -28,8 +19,6 @@ import io.github.sceneview.ar.getDescription
 import io.github.sceneview.ar.node.AnchorNode
 import io.github.sceneview.math.Position
 import io.github.sceneview.node.ModelNode
-import io.github.sceneview.rememberEngine
-import io.github.sceneview.rememberModelLoader
 import kotlinx.coroutines.launch
 
 class ArActivity : AppCompatActivity() {

@@ -30,9 +30,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/cookie_logo_img"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/cookie_logo_img"
         android:supportsRtl="true"
         android:theme="@style/Theme.Edugo_FE"
         tools:targetApi="31">
@@ -50,7 +50,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.BROWSABLE"/>
-
+            </intent-filter>
+            <intent-filter>
                 <data
                     android:host="oauth"
                     android:scheme="@string/KAKAO_APP_KEY_FOR_MANI" />
