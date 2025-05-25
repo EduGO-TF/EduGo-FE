@@ -43,11 +43,16 @@ class MainActivity : AppCompatActivity() {
 
         val mainLayout = binding.mainLayout
 
+//         AR Button 누를 시 activity 이동
+        binding.mArButton.setOnClickListener {
+            moveArActivity()
+        }
+
         // Set up background
         mainLayout.setBackgroundResource(R.drawable.bg_sky_and_ground) // Replace with your drawable
 
         val character = ImageView(this).apply {
-            setImageResource(R.drawable.gingerbread) // Replace with your character drawable
+            setImageResource(R.drawable.cookie_character) // Replace with your character drawable
             layoutParams = ConstraintLayout.LayoutParams(300, 300) // Character size
         }
         mainLayout.addView(character)
@@ -77,6 +82,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    }
+
+    private fun moveArActivity() {
+        startActivity(Intent(this, ArActivity::class.java))
     }
 
     private fun setCharacterStartPosition(character: View, screenWidth: Int, screenHeight: Int) {

@@ -42,20 +42,33 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    composeOptions{
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
     buildFeatures{
         viewBinding = true
+        compose = true
         buildConfig = true
     }
+
 }
 
 dependencies {
 
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
-    implementation("com.airbnb.android:lottie:6.0.0")
+    implementation("androidx.compose.ui:ui:1.4.0")
+    implementation("androidx.compose.material:material:1.4.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.0")
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    // sceneView
+    implementation("io.github.sceneview:arsceneview:2.3.0")
+    api("com.google.ar:core:1.48.0")
+    
+    // Splash screen
+    implementation("androidx.core:core-splashscreen:1.0.0")
+
+    // Coroutine
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Kakao Sdk
     implementation("com.kakao.sdk:v2-user:2.16.0")
@@ -67,11 +80,14 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    testImplementation(libs.junit)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.activity)
+    implementation(libs.material)
+    implementation(libs.androidx.appcompat)
+
+
+
 }
