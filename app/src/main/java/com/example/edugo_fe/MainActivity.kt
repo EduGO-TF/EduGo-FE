@@ -1,6 +1,7 @@
 package com.example.edugo_fe
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.edugo_fe.Login.LoginActivity
 import com.example.edugo_fe.databinding.ActivityMainBinding
 import com.kakao.sdk.common.util.Utility
 import kotlin.random.Random
@@ -22,6 +24,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 카카오 로그인 (토큰 저장)
+        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
+        val accessToken = prefs.getString("accessToken", null)
+
+//
+//        if (accessToken != null){
+//            // 로그인 안됨
+//            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//            return
+//        }
+
+
+
 
         val mainLayout = binding.mainLayout
 
@@ -55,6 +73,10 @@ class MainActivity : AppCompatActivity() {
 
         var keyHash = Utility.getKeyHash(this)
         Log.i("gunheu", "keyHash : $keyHash")
+
+
+
+
     }
 
     private fun setCharacterStartPosition(character: View, screenWidth: Int, screenHeight: Int) {
