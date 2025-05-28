@@ -18,6 +18,7 @@
     <string name="tap_anywhere_to_add_model">Tap anywhere to add model</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="start_ment">쿠키가 안전하게\n모험을 떠날 수 있게 도와주세요</string>
+    <string name="start_ment">이야기 속으로\n들어가 보아요</string>
+    <string name="onboarding_ment">숲을 찾아보아요</string>
 
 </resources>
