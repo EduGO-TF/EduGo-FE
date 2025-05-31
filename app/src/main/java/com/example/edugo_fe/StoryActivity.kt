@@ -14,15 +14,17 @@ class StoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStoryBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
+        enableEdgeToEdge()
 
-        binding.floatingButton.setOnClickListener {
+        binding.storyTitle.bringToFront()
+        binding.storyEnterButton.bringToFront()
+
+        binding.exitButton.setOnClickListener {
             moveToHome()
         }
-
-
     }
+
 
     private fun moveToHome() {
         val intent = Intent(this@StoryActivity, MainActivity::class.java)

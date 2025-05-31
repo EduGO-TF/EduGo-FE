@@ -25,7 +25,7 @@
         android:id="@+id/cookie_character"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/cookie_character"
+        android:src="@drawable/ginger_character"
         android:layout_marginTop="28dp"
         app:layout_constraintTop_toBottomOf="@id/start_ment"
         app:layout_constraintStart_toStartOf="parent"

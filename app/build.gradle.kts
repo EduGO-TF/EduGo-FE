@@ -55,6 +55,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.fragment:fragment-ktx:1.5.7")
     implementation("androidx.compose.ui:ui:1.4.0")
     implementation("androidx.compose.material:material:1.4.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.0")

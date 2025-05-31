@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.PixelCopy
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.edugo_fe.ApiData.Detection
@@ -48,6 +50,7 @@ class ArActivity : AppCompatActivity() {
     private lateinit var instructionText: TextView
     private var arSession: Session? = null
     private lateinit var back_button : FloatingActionButton
+    private lateinit var arIng : ImageView
 
     private lateinit var binding: ActivityArBinding
 
@@ -83,9 +86,11 @@ class ArActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityArBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
 
+        arIng = binding.arIng
         instructionText = binding.instructionText
-        back_button = binding.backButton
+//        back_button = binding.backButton
 
         // ARSceneView 초기화를 onCreate에서 즉시 수행
         sceneView = binding.arSceneView.apply {
@@ -106,9 +111,9 @@ class ArActivity : AppCompatActivity() {
 
         captureArImageAndSend() // 3초 후 캡쳐 시작
 
-        back_button.setOnClickListener {
-            onBackPressed()
-        }
+//        back_button.setOnClickListener {
+//            onBackPressed()
+//        }
 
     }
 
@@ -307,21 +312,35 @@ class ArActivity : AppCompatActivity() {
 
     // Detecion List 데이터 다루기
     private fun handleDetections(detections: List<Detection>) {
+        // 로그 출력
+        if (detections.isEmpty()) {
+            Log.d("AIResponse", "탐지된 객체가 없습니다.")
+            arIng.visibility = android.view.View.INVISIBLE
+            instructionText.text = "탐지된 객체가 없습니다"
+            Toast.makeText(this, "탐지 실패", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         detections.forEach { detection ->
             Log.d("AIResponse", "Class ID: ${detection.class_id}")
             Log.d("AIResponse", "Confidence: ${detection.confidence}")
         }
 
-        // 특정 조건에서 캐릭터 생성
+        // 탐지된 객체 중에서 가장 높은 confidence 값을 가진 객체 확인
         val highestConfidenceDetection = detections.maxByOrNull { it.confidence }
-        highestConfidenceDetection?.let { detection ->
-            if (detection.class_id == 0 && detection.confidence > 0.4f) {
-                showCharacterDirectly()
-                Toast.makeText(this, "배경 [숲] 인식 완료!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "배경 인식 안됨 x", Toast.LENGTH_SHORT).show()
-            }
+        if (highestConfidenceDetection == null || highestConfidenceDetection.confidence <= 0.4f || highestConfidenceDetection.class_id != 0) {
+            Log.d("AIResponse", "탐지된 객체가 조건에 부합하지 않습니다.")
+            arIng.visibility = android.view.View.INVISIBLE
+            instructionText.text = "탐지된 객체가 조건에 부합하지 않습니다"
+            Toast.makeText(this, "조건에 맞는 객체 탐지 실패", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        // 조건 만족 시 캐릭터 생성
+        showCharacterDirectly()
+        arIng.visibility = android.view.View.INVISIBLE
+        instructionText.visibility = android.view.View.INVISIBLE
+        Toast.makeText(this, "배경 [숲] 인식 완료!", Toast.LENGTH_SHORT).show()
     }
 
     // 생명 주기 관리

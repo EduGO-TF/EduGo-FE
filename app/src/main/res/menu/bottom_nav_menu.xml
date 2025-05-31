@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_quest"
+        android:icon="@drawable/ic_quest"
+        android:title="퀘스트"
+        />
+    <item
+        android:id="@+id/action_camera"
+        android:icon="@drawable/ic_camera"
+            android:title="카메라" />
+    <item
+        android:id="@+id/action_book"
+        android:icon="@drawable/ic_book"
+        android:title="도감" />
+</menu>

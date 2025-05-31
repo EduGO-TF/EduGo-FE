@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
@@ -16,30 +17,26 @@ import com.example.edugo_fe.databinding.ActivityMainBinding
 import com.kakao.sdk.common.util.Utility
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private val random = Random.Default
+
+    override fun getLayoutResource(): Int {
+        return R.layout.activity_main
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
+
+
+
 
         // 카카오 로그인 (토큰 저장)
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
         val accessToken = prefs.getString("accessToken", null)
-
-//
-//        if (accessToken != null){
-//            // 로그인 안됨
-//            val intent = Intent(this@MainActivity, LoginActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//            return
-//        }
-
-
-
 
         val mainLayout = binding.mainLayout
 
@@ -51,18 +48,20 @@ class MainActivity : AppCompatActivity() {
         // Set up background
         mainLayout.setBackgroundResource(R.drawable.bg_sky_and_ground) // Replace with your drawable
 
-        val character = ImageView(this).apply {
-            setImageResource(R.drawable.cookie_character_change) // Replace with your character drawable
-            layoutParams = ConstraintLayout.LayoutParams(300, 300) // Character size
-        }
-        mainLayout.addView(character)
+//        val character = ImageView(this).apply {
+//            setImageResource(R.drawable.ginger_character) // Replace with your character drawable
+//            layoutParams = ConstraintLayout.LayoutParams(300, 300) // Character size
+//        }
+//        mainLayout.addView(character)
+
 
         // Ensure layout is ready before animating
         mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 if (mainLayout.width > 0 && mainLayout.height > 0) {
                     // Set character's initial random position within the ground area
-                    setCharacterStartPosition(character, mainLayout.width, mainLayout.height)
+//                    setCharacterStartPosition(character, mainLayout.width, mainLayout.height)
+                    val character = binding.character
 
                     startRandomMovement(character, mainLayout.width, mainLayout.height)
                     mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -75,34 +74,51 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        var keyHash = Utility.getKeyHash(this)
-        Log.i("gunheu", "keyHash : $keyHash")
-
-
-
-
     }
+
+
 
     private fun moveArActivity() {
         startActivity(Intent(this, ArActivity::class.java))
     }
 
-    private fun setCharacterStartPosition(character: View, screenWidth: Int, screenHeight: Int) {
+    private fun setCharacterStartPosition() {
         // Define the ground area (bottom third of the screen)
-        val groundTop = screenHeight * 2 / 3
-        val groundBottom = screenHeight - character.height
-        val groundLeft = 0
-        val groundRight = screenWidth - character.width
+//        val groundTop = screenHeight * 2 / 3
+//        val groundBottom = screenHeight - character.height
+//        val groundLeft = 0
+//        val groundRight = screenWidth - character.width
+//
+//        // Set random initial position
+//        val startX = random.nextInt(groundLeft, groundRight).toFloat()
+//        val startY = random.nextInt(groundTop, groundBottom).toFloat()
+//        character.translationX = startX
+//        character.translationY = startY
 
-        // Set random initial position
-        val startX = random.nextInt(groundLeft, groundRight).toFloat()
-        val startY = random.nextInt(groundTop, groundBottom).toFloat()
-        character.translationX = startX
-        character.translationY = startY
+        // 캐릭터 좌푯값 받고, 아래로 이동
+        val percentX = intent.getFloatExtra("PERCENT_X", 0.5f)
+        val percentY = intent.getFloatExtra("PERCENT_Y", 0.5f)
+
+        Log.d("Coord", "$percentX")
+        Log.d("Coord", "$percentY")
+        val screenWidth = resources.displayMetrics.widthPixels
+        val screenHeight = resources.displayMetrics.heightPixels
+
+        // 상대 좌표 변환 (절대값 ->  %)
+        val startX = percentX * screenWidth - binding.character.width / 2 // 가운데 정렬
+        val startY = percentY * screenHeight - binding.character.height / 2
+        binding.character.translationX = startX
+        binding.character.translationY = startY
+
+        binding.character.animate()
+            .translationY(startY + 100f)
+            .setDuration(1000)
+            .start()
     }
 
     private fun startRandomMovement(character: View, screenWidth: Int, screenHeight: Int) {
+        setCharacterStartPosition()
+
         // Define the ground area (bottom third of the screen)
         val groundTop = screenHeight * 2 / 3
         val groundBottom = screenHeight - character.height
