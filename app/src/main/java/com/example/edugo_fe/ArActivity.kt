@@ -16,9 +16,9 @@ import com.example.edugo_fe.ApiData.Detection
 import com.example.edugo_fe.ApiData.DetectionsResponse
 import com.example.edugo_fe.databinding.ActivityArBinding
 import com.example.edugo_fe.network.ApiClient
+import com.example.edugo_fe.network.ApiService
+import com.example.edugo_fe.network.AuthService
 import com.google.android.filament.View
-import com.google.android.filament.utils.Float3
-import com.google.android.filament.utils.rotation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.ar.core.Anchor
 import com.google.ar.core.Config
@@ -26,14 +26,12 @@ import com.google.ar.core.Session
 import com.google.ar.core.TrackingFailureReason
 import com.google.ar.core.TrackingState
 import io.github.sceneview.ar.ARSceneView
-import io.github.sceneview.ar.arcore.rotation
 import io.github.sceneview.ar.getDescription
 import io.github.sceneview.ar.node.AnchorNode
-import io.github.sceneview.collision.Quaternion
 import io.github.sceneview.math.Position
 import io.github.sceneview.node.ModelNode
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
@@ -49,8 +47,7 @@ class ArActivity : AppCompatActivity() {
     private lateinit var sceneView: ARSceneView
     private lateinit var instructionText: TextView
     private var arSession: Session? = null
-    private lateinit var back_button : FloatingActionButton
-    private lateinit var arIng : ImageView
+    private lateinit var arIng: ImageView
 
     private lateinit var binding: ActivityArBinding
 
@@ -140,18 +137,6 @@ class ArActivity : AppCompatActivity() {
                         )
                     }
 
-//                    // 2. 위치 계산 (카메라 위치 + 정방향 1m)
-//                    val position = floatArrayOf(
-//                        pose.tx() + forward[0],
-//                        pose.ty() + forward[1],
-//                        pose.tz() + forward[2]
-//                    )
-//
-//                    // 3. 회전 쿼터니언 추출
-//                    val rotationQuaternion = FloatArray(4).apply {
-//                        pose.getRotationQuaternion(this, 0)
-//                    }
-
                     val rotation = FloatArray(4).apply {
                         pose.getRotationQuaternion(this, 0)
                         // 수동 쿼터니언 조정 (Y축 90도)
@@ -172,14 +157,6 @@ class ArActivity : AppCompatActivity() {
                             rotation
                         )
                     )
-//                    addAnchorNode(a
-
-//                    val anchor = arSession!!.createAnchor(
-//                        com.google.ar.core.Pose(
-//                            position,
-//                            rotationQuaternion // 수정된 회전 데이터
-//                        )
-//                    )
                     addAnchorNode(anchor)
                     Log.d("AIResponse", "앵커 생성 성공")
                 } catch (e: Exception) {
@@ -208,7 +185,7 @@ class ArActivity : AppCompatActivity() {
 
 
     // StoryActivity로 이동
-    private fun moveToStory(){
+    private fun moveToStory() {
         val intent = Intent(this@ArActivity, StoryActivity::class.java)
 //        intent.putExtra("MODEL_NAME", "gingerbread") // 필요한 데이터를 전달
         startActivity(intent)
@@ -224,7 +201,7 @@ class ArActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         buildModelNode()?.let { modelNode ->
                             // 1. ModelNode 클릭 리스너 추가
-                            modelNode.onTouch = {motionEvent, hitResult ->
+                            modelNode.onTouch = { motionEvent, hitResult ->
                                 moveToStory()
                                 true
                             }
@@ -262,9 +239,13 @@ class ArActivity : AppCompatActivity() {
             Log.d("AIResponse", "대기는 함")
 
             val surfaceView = binding.arSceneView // 적절한 SurfaceView 참조
-            Log.d("AIResponse", "surfaceView width: ${surfaceView.width}, height: ${surfaceView.height}")
+            Log.d(
+                "AIResponse",
+                "surfaceView width: ${surfaceView.width}, height: ${surfaceView.height}"
+            )
             // ARSceneView 캡쳐
-            val bitmap = Bitmap.createBitmap(surfaceView.width, surfaceView.height, Bitmap.Config.ARGB_8888)
+            val bitmap =
+                Bitmap.createBitmap(surfaceView.width, surfaceView.height, Bitmap.Config.ARGB_8888)
             PixelCopy.request(surfaceView, bitmap, { result ->
                 if (result == PixelCopy.SUCCESS) {
                     Log.d("AIResponse", "Image Capture!")
@@ -284,11 +265,11 @@ class ArActivity : AppCompatActivity() {
         }
 
         // 파일을 requestBody로 변환
-        val requestFile = file.asRequestBody("image/jpeg".toMediaType())
+        val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull()!!)
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
 
         // Retrofit 호출
-        val apiService = ApiClient.createApiService()
+        val apiService = ApiClient.createService(ApiService::class.java)
         val call = apiService.getForest(body)
         call.enqueue(object : Callback<DetectionsResponse> {
             override fun onResponse(
@@ -346,23 +327,10 @@ class ArActivity : AppCompatActivity() {
     // 생명 주기 관리
     override fun onResume() {
         super.onResume()
-//        try {
-//            arSession?.resume()
-//            sceneView.onSessionResumed
-//        } catch (e: Exception) {
-//            Log.e("ArActivity", "Error resuming ARSession: ${e.message}")
-//           }
     }
 
     override fun onPause() {
         super.onPause()
-//        try {
-//            arSession?.pause()
-//            sceneView.onSessionPaused
-//            Log.d("AIResponse", "Paused")
-//        } catch (e: Exception) {
-//            Log.e("ArActivity", "Error pausing ARSession: ${e.message}")
-//        }
     }
 
     override fun onStop() {
@@ -372,14 +340,5 @@ class ArActivity : AppCompatActivity() {
             arSession?.close()
         }
         super.onStop()
-    }
-
-    override fun onDestroy() {
-        // 백업 정리 로직
-        if (!isFinishing) {
-            cleanupARSession()
-        }
-        super.onDestroy()
-        Log.d("AIResponse", "최종 종료 완료")
     }
 }

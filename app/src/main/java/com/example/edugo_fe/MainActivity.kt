@@ -1,6 +1,7 @@
 package com.example.edugo_fe
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,9 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.edugo_fe.Login.KeystoreHelper
 import com.example.edugo_fe.Login.LoginActivity
+import com.example.edugo_fe.Login.SecurePrefs
 import com.example.edugo_fe.databinding.ActivityMainBinding
 import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.user.UserApiClient
 import kotlin.random.Random
 
 class MainActivity : BaseActivity() {
@@ -31,22 +35,34 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
+        // AccessToken이 존재하지 않을 경우 LoginActivity로 이동
+        if (SecurePrefs.getAccessToken(this) == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        } else {
+            val mainLayout = binding.mainLayout
 
+            //  AR Button 누를 시 activity 이동
+            binding.mArButton.setOnClickListener {
+                moveArActivity()
+            }
 
+            // Back Button 누를 경우 로그아웃
+            binding.logoutButton.setOnClickListener {
+                // 앱 내부 토큰 삭제
+                logout(this)
 
-        // 카카오 로그인 (토큰 저장)
-        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-        val accessToken = prefs.getString("accessToken", null)
+                // Kakao 서버 로그아웃
+                UserApiClient.instance.logout { error ->
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finishAffinity()
+                }
+            }
 
-        val mainLayout = binding.mainLayout
-
-//         AR Button 누를 시 activity 이동
-        binding.mArButton.setOnClickListener {
-            moveArActivity()
-        }
-
-        // Set up background
-        mainLayout.setBackgroundResource(R.drawable.bg_sky_and_ground) // Replace with your drawable
+            // Set up background
+            mainLayout.setBackgroundResource(R.drawable.bg_sky_and_ground) // Replace with your drawable
 
 //        val character = ImageView(this).apply {
 //            setImageResource(R.drawable.ginger_character) // Replace with your character drawable
@@ -55,25 +71,28 @@ class MainActivity : BaseActivity() {
 //        mainLayout.addView(character)
 
 
-        // Ensure layout is ready before animating
-        mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                if (mainLayout.width > 0 && mainLayout.height > 0) {
-                    // Set character's initial random position within the ground area
+            // Ensure layout is ready before animating
+            mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    if (mainLayout.width > 0 && mainLayout.height > 0) {
+                        // Set character's initial random position within the ground area
 //                    setCharacterStartPosition(character, mainLayout.width, mainLayout.height)
-                    val character = binding.character
+                        val character = binding.character
 
-                    startRandomMovement(character, mainLayout.width, mainLayout.height)
-                    mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        startRandomMovement(character, mainLayout.width, mainLayout.height)
+                        mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    }
                 }
-            }
-        })
+            })
 
-        ViewCompat.setOnApplyWindowInsetsListener(mainLayout) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+            ViewCompat.setOnApplyWindowInsetsListener(mainLayout) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
         }
+
+
     }
 
 
@@ -96,8 +115,8 @@ class MainActivity : BaseActivity() {
 //        character.translationY = startY
 
         // 캐릭터 좌푯값 받고, 아래로 이동
-        val percentX = intent.getFloatExtra("PERCENT_X", 0.5f)
-        val percentY = intent.getFloatExtra("PERCENT_Y", 0.5f)
+        val percentX = intent.getFloatExtra("START_X", 0.5f)
+        val percentY = intent.getFloatExtra("START_Y", 0.5f)
 
         Log.d("Coord", "$percentX")
         Log.d("Coord", "$percentY")
@@ -150,6 +169,12 @@ class MainActivity : BaseActivity() {
 
         // Start the initial random movement
         moveToRandomPosition()
+    }
+
+    // 로그아웃 구현
+    private fun logout(context: Context) {
+        SecurePrefs.clearAccessToken(context)
+        KeystoreHelper(context).deleteToken()
     }
 }
 
