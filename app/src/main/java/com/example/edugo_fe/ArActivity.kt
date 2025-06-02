@@ -30,6 +30,8 @@ import io.github.sceneview.ar.getDescription
 import io.github.sceneview.ar.node.AnchorNode
 import io.github.sceneview.math.Position
 import io.github.sceneview.node.ModelNode
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -87,7 +89,6 @@ class ArActivity : AppCompatActivity() {
 
         arIng = binding.arIng
         instructionText = binding.instructionText
-//        back_button = binding.backButton
 
         // ARSceneView 초기화를 onCreate에서 즉시 수행
         sceneView = binding.arSceneView.apply {
@@ -107,11 +108,6 @@ class ArActivity : AppCompatActivity() {
         }
 
         captureArImageAndSend() // 3초 후 캡쳐 시작
-
-//        back_button.setOnClickListener {
-//            onBackPressed()
-//        }
-
     }
 
     private fun showCharacterDirectly() {
@@ -147,18 +143,21 @@ class ArActivity : AppCompatActivity() {
                         this[3] = cos(angle / 2) // w
                     }
 
-                    val anchor = arSession!!.createAnchor(
-                        com.google.ar.core.Pose(
-                            floatArrayOf(
-                                pose.tx() + forward[0],
-                                pose.ty() + forward[1],
-                                pose.tz() + forward[2]
-                            ),
-                            rotation
+                    arSession?.let { session ->
+                        val anchor = session.createAnchor(
+                            com.google.ar.core.Pose(
+                                floatArrayOf(
+                                    pose.tx() + forward[0],
+                                    pose.ty() + forward[1],
+                                    pose.tz() + forward[2]
+                                ),
+                                rotation
+                            )
                         )
-                    )
-                    addAnchorNode(anchor)
-                    Log.d("AIResponse", "앵커 생성 성공")
+                        addAnchorNode(anchor)
+                        Log.d("AIResponse", "앵커 생성 성공")
+                    }
+
                 } catch (e: Exception) {
                     Log.e("AIResponse", "앵커 생성 실패: ${e.message}")
                 }
@@ -166,27 +165,10 @@ class ArActivity : AppCompatActivity() {
         }
     }
 
-
-    override fun onBackPressed() {
-        // AR 세션이 활성화된 경우 우선 정리
-        if (::sceneView.isInitialized && arSession != null) {
-            cleanupARSession()
-        }
-        super.onBackPressed()
-    }
-
-    private fun cleanupARSession() {
-        sceneView.destroy()
-        arSession?.close()
-        arSession = null
-        anchorNode?.anchor?.detach()
-        anchorNode = null
-    }
-
-
     // StoryActivity로 이동
     private fun moveToStory() {
         val intent = Intent(this@ArActivity, StoryActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
 //        intent.putExtra("MODEL_NAME", "gingerbread") // 필요한 데이터를 전달
         startActivity(intent)
         finish()
@@ -238,22 +220,20 @@ class ArActivity : AppCompatActivity() {
             kotlinx.coroutines.delay(3000)
             Log.d("AIResponse", "대기는 함")
 
-            val surfaceView = binding.arSceneView // 적절한 SurfaceView 참조
-            Log.d(
-                "AIResponse",
-                "surfaceView width: ${surfaceView.width}, height: ${surfaceView.height}"
-            )
-            // ARSceneView 캡쳐
-            val bitmap =
-                Bitmap.createBitmap(surfaceView.width, surfaceView.height, Bitmap.Config.ARGB_8888)
-            PixelCopy.request(surfaceView, bitmap, { result ->
-                if (result == PixelCopy.SUCCESS) {
-                    Log.d("AIResponse", "Image Capture!")
-                    sendImageToServer(bitmap) // 서버로 이미지 전송
-                } else {
-                    Log.e("AIResponse", "Failed to capture AR image.")
-                }
-            }, android.os.Handler(Looper.getMainLooper()))
+            if (isActive){
+                val surfaceView = sceneView // 적절한 SurfaceView 참조
+                // ARSceneView 캡쳐
+                val bitmap =
+                    Bitmap.createBitmap(surfaceView.width, surfaceView.height, Bitmap.Config.ARGB_8888)
+                PixelCopy.request(surfaceView, bitmap, { result ->
+                    if (result == PixelCopy.SUCCESS) {
+                        Log.d("AIResponse", "Image Capture!")
+                        sendImageToServer(bitmap) // 서버로 이미지 전송
+                    } else {
+                        Log.e("AIResponse", "Failed to capture AR image.")
+                    }
+                }, android.os.Handler(Looper.getMainLooper()))
+            }
         }
     }
 
@@ -324,21 +304,40 @@ class ArActivity : AppCompatActivity() {
         Toast.makeText(this, "배경 [숲] 인식 완료!", Toast.LENGTH_SHORT).show()
     }
 
-    // 생명 주기 관리
-    override fun onResume() {
-        super.onResume()
+    private fun cleanupARSession() {
+        // Coroutine 취소
+        lifecycleScope.cancel()
+
+        // AR 리소스 정리
+        arSession?.close()
+        arSession = null
+        anchorNode?.anchor?.detach()
+        anchorNode = null
+//        sceneView.destroy()
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
 
-    override fun onStop() {
-        // 액티비티가 완전히 종료될 때 리소스 정리
-        if (isFinishing) {
-            sceneView.destroy()
-            arSession?.close()
-        }
-        super.onStop()
-    }
+    // 생명 주기 관리 -> 자동으로 생명주기를 관리하기 때문에 다른 걸 넣을 필요가 없음
+//    override fun onResume() {
+//        Log.d("AIResponse", "Resume!")
+//        super.onResume()
+//        arSession?.let {
+//            sceneView.onSessionResumed(it)
+//        }
+//    }
+//
+//    override fun onPause() {
+//        Log.d("AIResponse", "Pause!")
+//        super.onPause()
+//        arSession?.let {
+//            sceneView.onSessionPaused(it)
+//        }
+//    }
+
+//    override fun onDestroy() {
+//        Log.d("AIResponse", "Destroy!")
+//        // 액티비티가 완전히 종료될 때 리소스 정리
+//        cleanupARSession()
+//        super.onDestroy()
+//    }
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -67,10 +68,12 @@ class OnBoardingFragment : Fragment() {
             .setDuration(700)
             .withEndAction {
                 // 애니메이션이 끝난 후 메인 화면으로 이동
-                val intent = Intent(requireContext(), MainActivity::class.java).apply {
-                    putExtra("START_X", percentX)
-                    putExtra("START_Y", percentY)
-                }
+                val intent = Intent(requireContext(), MainActivity::class.java)
+//                    putExtra("START_X", percentX)
+//                    putExtra("START_Y", percentY)
+//                    Log.d("AIResponse", "OnBoardingFragment : ${percentX}")
+//                    Log.d("AIResponse", "OnBoardingFragment : ${percentY}")
+
                 startActivity(intent)
                 requireActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                 requireActivity().finish()

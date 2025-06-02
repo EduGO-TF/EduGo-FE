@@ -36,7 +36,8 @@ class MainActivity : BaseActivity() {
         enableEdgeToEdge()
 
         // AccessToken이 존재하지 않을 경우 LoginActivity로 이동
-        if (SecurePrefs.getAccessToken(this) == null) {
+        // 해당 부분 로그인 가능해지면 수정요망 == 으로
+        if (SecurePrefs.getAccessToken(this) != null) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         } else {
@@ -102,30 +103,20 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setCharacterStartPosition() {
-        // Define the ground area (bottom third of the screen)
-//        val groundTop = screenHeight * 2 / 3
-//        val groundBottom = screenHeight - character.height
-//        val groundLeft = 0
-//        val groundRight = screenWidth - character.width
-//
-//        // Set random initial position
-//        val startX = random.nextInt(groundLeft, groundRight).toFloat()
-//        val startY = random.nextInt(groundTop, groundBottom).toFloat()
-//        character.translationX = startX
-//        character.translationY = startY
-
         // 캐릭터 좌푯값 받고, 아래로 이동
-        val percentX = intent.getFloatExtra("START_X", 0.5f)
-        val percentY = intent.getFloatExtra("START_Y", 0.5f)
-
-        Log.d("Coord", "$percentX")
-        Log.d("Coord", "$percentY")
+//        val percentX = intent.getFloatExtra("START_X", 0.5f)
+//        val percentY = intent.getFloatExtra("START_Y", 0.5f)
+//
+//        Log.d("AIResponse", "MainActivity : ${percentX}")
+//        Log.d("AIResponse", "MainActivity : ${percentY}")
         val screenWidth = resources.displayMetrics.widthPixels
         val screenHeight = resources.displayMetrics.heightPixels
 
         // 상대 좌표 변환 (절대값 ->  %)
-        val startX = percentX * screenWidth - binding.character.width / 2 // 가운데 정렬
-        val startY = percentY * screenHeight - binding.character.height / 2
+//        val startX = percentX * screenWidth - binding.character.width / 2 // 가운데 정렬
+//        val startY = percentY * screenHeight - binding.character.height / 2
+        val startX = (screenWidth / 2 - binding.character.width / 2).toFloat()
+        val startY = (screenHeight / 2 - binding.character.height).toFloat()
         binding.character.translationX = startX
         binding.character.translationY = startY
 
