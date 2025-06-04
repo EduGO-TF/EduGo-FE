@@ -63,8 +63,8 @@ class OnBoardingFragment : Fragment() {
 
         // 쿠키가 작아지는 애니메이션
         binding.cookieCharacter.animate()
-            .scaleX(0.3f)
-            .scaleY(0.3f)
+            .scaleX(0.4f)
+            .scaleY(0.4f)
             .setDuration(700)
             .withEndAction {
                 // 애니메이션이 끝난 후 메인 화면으로 이동

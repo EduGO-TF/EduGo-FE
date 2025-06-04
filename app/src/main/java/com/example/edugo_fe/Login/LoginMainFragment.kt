@@ -51,4 +51,9 @@ class LoginMainFragment: Fragment(){
         super.onViewCreated(view, savedInstanceState)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null // 메모리 누수 방지
+    }
+
 }

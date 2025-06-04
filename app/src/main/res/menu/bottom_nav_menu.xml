@@ -6,9 +6,11 @@
         android:title="퀘스트"
         />
     <item
-        android:id="@+id/action_camera"
-        android:icon="@drawable/ic_camera"
-            android:title="카메라" />
+        android:id="@+id/nav_dummy"
+        android:enabled="false"
+        android:icon="@android:color/transparent"
+        android:title=""/>
+
     <item
         android:id="@+id/action_book"
         android:icon="@drawable/ic_book"

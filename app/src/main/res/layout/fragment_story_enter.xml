@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/hansel_and_gretel"
+    tools:context=".story.StoryEnterFragment">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/play_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/play_button"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/exit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_exit"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/story_modal"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:src="@drawable/story_modal"
+        android:layout_marginHorizontal="55dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <TextView
+        android:id="@+id/story_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="헨젤과 그레텔"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="20sp"
+        android:layout_marginTop="50dp"
+        android:elevation="1dp"
+        app:layout_constraintStart_toStartOf="@id/story_modal"
+        app:layout_constraintTop_toTopOf="@id/story_modal"
+        app:layout_constraintEnd_toEndOf="@id/story_modal"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/story_enter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/story_enter_button"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="16dp"
+        android:elevation="1dp"
+        app:layout_constraintTop_toBottomOf="@id/story_title"
+        app:layout_constraintStart_toStartOf="@id/story_modal"
+        app:layout_constraintEnd_toEndOf="@id/story_modal"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/story_content_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_story"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@id/story_modal"
+        app:layout_constraintStart_toEndOf="@id/story_modal"
+        />
+
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/cookie_character"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:src="@drawable/ginger_character"-->
+    <!--        android:layout_marginBottom="50dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

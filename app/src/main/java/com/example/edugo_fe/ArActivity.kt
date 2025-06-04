@@ -17,9 +17,8 @@ import com.example.edugo_fe.ApiData.DetectionsResponse
 import com.example.edugo_fe.databinding.ActivityArBinding
 import com.example.edugo_fe.network.ApiClient
 import com.example.edugo_fe.network.ApiService
-import com.example.edugo_fe.network.AuthService
+import com.example.edugo_fe.story.StoryActivity
 import com.google.android.filament.View
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.ar.core.Anchor
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -107,7 +106,12 @@ class ArActivity : AppCompatActivity() {
             }
         }
 
-        captureArImageAndSend() // 3초 후 캡쳐 시작
+        binding.storyButton.setOnClickListener {
+            startActivity(Intent(this@ArActivity, StoryActivity::class.java))
+            finish()
+        }
+
+//        captureArImageAndSend() // 3초 후 캡쳐 시작
     }
 
     private fun showCharacterDirectly() {
