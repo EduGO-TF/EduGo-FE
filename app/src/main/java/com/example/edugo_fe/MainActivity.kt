@@ -5,16 +5,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.GestureDetector
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageButton
-import android.widget.ImageView
+import android.widget.PopupWindow
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -22,7 +21,6 @@ import com.example.edugo_fe.Login.KeystoreHelper
 import com.example.edugo_fe.Login.LoginActivity
 import com.example.edugo_fe.Login.SecurePrefs
 import com.example.edugo_fe.databinding.ActivityMainBinding
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import kotlin.random.Random
 
@@ -108,7 +106,7 @@ class MainActivity : BaseActivity() {
     private fun setupCharacterInteraction() {
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener(){
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                showChangeClothesDialog()
+                showPopupAboveCharacter()
 //                isAnimating = false
                 return true
             }
@@ -124,13 +122,13 @@ class MainActivity : BaseActivity() {
 
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    isAnimating = false
-                    // 드래그 시작 위치 지정
+                    isAnimating = false // 랜덤 움직임 중지
+                    moveX?.cancel() // 애니메이션 취소
+                    moveY?.cancel() // 애니메이션 취소
                     dX = v.x - event.rawX
                     dY = v.y - event.rawY
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    // 드래그 중 위치 업데이트
                     v.animate()
                         .x(event.rawX + dX)
                         .y(event.rawY + dY)
@@ -138,7 +136,7 @@ class MainActivity : BaseActivity() {
                         .start()
                 }
                 MotionEvent.ACTION_UP -> {
-                    isAnimating = true
+                    isAnimating = true // 랜덤 움직임 재개
                     startRandomMovement(binding.character, binding.mainLayout.width, binding.mainLayout.height)
                 }
             }
@@ -146,19 +144,33 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    private fun showPopupAboveCharacter() {
+        val popupView = layoutInflater.inflate(R.layout.popup_closet_dialog, null)
+        val popupWindow = PopupWindow(
+            popupView,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
 
-    private fun showChangeClothesDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_change_clothes, null)
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
+        // 캐릭터 바로 위에 위치시키기
+        val location = IntArray(2)
+        binding.character.getLocationOnScreen(location)
+        val characterX = location[0]
+        val characterY = location[1]
 
-        dialogView.findViewById<ImageButton>(R.id.change_clothes_button).setOnClickListener {
+        // Popup 위치 조정
+        val offsetX = - binding.character.width / 3 - popupView.measuredWidth / 2
+        val offsetY = - binding.character.height / 5 - popupView.measuredHeight
+        popupWindow.showAtLocation(binding.character, Gravity.NO_GRAVITY, characterX + offsetX, characterY + offsetY)
+
+        popupView.findViewById<ImageButton>(R.id.change_clothes_button).setOnClickListener {
             startActivity(Intent(this@MainActivity, ClosetActivity::class.java))
-            dialog.dismiss()
+            popupWindow.dismiss()
         }
-
-        dialog.show()
+        isAnimating = false
+        moveX?.cancel()
+        moveY?.cancel()
     }
 
     private fun moveArActivity() {
@@ -199,9 +211,12 @@ class MainActivity : BaseActivity() {
         val groundRight = screenWidth - character.width
 
         fun moveToRandomPosition() {
-            if (!isAnimating) return
-            val currentX = character.translationX
-            val currentY = character.translationY
+            if (!isAnimating) {
+                character.clearAnimation()
+                return
+            }
+            moveX?.cancel()
+            moveY?.cancel()
 
             // Generate random target position within the ground area
             val targetX = random.nextInt(groundLeft, groundRight).toFloat()
@@ -222,14 +237,20 @@ class MainActivity : BaseActivity() {
                      moveToRandomPosition() })  // 상태 확인 후 재시작
                 start()
             }
-
-
-            // Start both animations
-//            moveX.start()
             moveY.start()
 
-            // Schedule the next random movement after the current one finishes
-//            moveX.addListener(onEnd = { moveToRandomPosition() })
+        }
+
+        fun stopAnimation() {
+            moveX?.apply {
+                cancel()
+                removeAllListeners()
+            }
+            moveY?.apply {
+                cancel()
+                removeAllListeners()
+            }
+
         }
 
         // Start the initial random movement

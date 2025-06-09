@@ -1,16 +1,24 @@
 package com.example.edugo_fe.story
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.edugo_fe.Login.LoginActivity
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.PopupWindow
+import androidx.activity.addCallback
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.edugo_fe.R
 import com.example.edugo_fe.databinding.FragmentStoryEnterBinding
 
 class StoryEnterFragment : Fragment() {
     private var _binding: FragmentStoryEnterBinding? = null
     private val binding get() = _binding!!
+    private val storyImageList = listOf(R.drawable.hansel_and_gretel_story_image_1, R.drawable.hansel_and_gretel_story_image_2)
+    private val countImageList = listOf(R.drawable.count_1_3, R.drawable.count_2_3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +38,70 @@ class StoryEnterFragment : Fragment() {
             (activity as StoryActivity).moveToHome()
         }
 
+        binding.storyEnterButton.setOnClickListener {
+            Log.d("AIResponse", "Clicked!!")
+            showPopupStory()
+        }
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
+            handleBackPressed()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null // 메모리 누수 방지
+    }
+
+    private fun showPopupStory() {
+        var count = 0
+        val popupView = layoutInflater.inflate(R.layout.popup_hansel_and_gretel_story_dialog, null)
+        val popupWindow = PopupWindow(
+            popupView,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
+        popupWindow.showAtLocation(binding.root, android.view.Gravity.CENTER, 0, 0)
+
+        popupView.findViewById<ImageButton>(R.id.btn_story_next).setOnClickListener {
+            count += 1
+            popupView.findViewById<ImageView>(R.id.story_image).setImageResource(storyImageList[count])
+            popupView.findViewById<ImageView>(R.id.count_image).setImageResource(countImageList[count])
+            if (count == 1) {
+                popupView.findViewById<ImageButton>(R.id.btn_story_before).apply {
+                    count -= 1
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        popupView.findViewById<ImageView>(R.id.story_image).setImageResource(storyImageList[count])
+                        popupView.findViewById<ImageView>(R.id.count_image).setImageResource(countImageList[count])
+                    }
+                }
+            }
+        }
+
+        binding.storyModal.visibility = View.INVISIBLE
+
+        popupWindow.setOnDismissListener {
+            binding.storyModal.apply {
+                alpha = 0f // 투명도를 0으로 설정
+                visibility = View.VISIBLE // 보이도록 설정
+                animate()
+                    .alpha(1f) // 투명도를 점차 1로 증가
+                    .setDuration(300) // 애니메이션 지속 시간 (밀리초)
+                    .start()
+            }
+        }
+    }
+
+    private fun handleBackPressed() {
+        (activity as? StoryActivity)?.moveToHome()
     }
 
 }

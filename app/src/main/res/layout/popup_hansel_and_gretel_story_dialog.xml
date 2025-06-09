@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/story_modal"
+        android:layout_width="313dp"
+        android:layout_height="449dp"
+        android:background="@drawable/story_modal"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginVertical="120dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/story_logo"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/edugo_img_logo"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="헨젤과 그레텔\n초반 줄거리"
+                android:textSize="12sp"
+                android:fontFamily="@font/pretendard_bold"
+                android:layout_marginStart="8dp"
+                android:layout_weight="4"/>
+
+            <ImageView
+                android:id="@+id/count_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/count_1_3"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_weight="2">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btn_story_before"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_story_before"
+                android:background="@android:color/transparent"
+                android:layout_alignLeft="@id/story_image"
+                android:layout_centerVertical="true"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:id="@+id/story_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/hansel_and_gretel_story_image_1"
+                android:layout_marginHorizontal="30dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btn_story_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_story_next"
+                android:background="@android:color/transparent"
+                android:layout_alignRight="@id/story_image"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_main_question_enter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_main_question_enter"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"/>
+
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

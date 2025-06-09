@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.viewpager2.widget.ViewPager2
 import com.example.edugo_fe.R
 import com.example.edugo_fe.databinding.ActivityLoginBinding
 import com.example.edugo_fe.network.ApiClient
@@ -14,7 +15,8 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 
 class LoginActivity : AppCompatActivity(), AuthFailureListener {
-    private lateinit var binding :ActivityLoginBinding
+    private lateinit var binding: ActivityLoginBinding
+    private lateinit var viewPager: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,8 @@ class LoginActivity : AppCompatActivity(), AuthFailureListener {
         setContentView(binding.root)
         ApiClient.setAuthFailureListener(this)
 
+//        initViewPager()
+
     }
 
     override fun onResume() {
@@ -31,21 +35,30 @@ class LoginActivity : AppCompatActivity(), AuthFailureListener {
         checkTokenAndNavigate()
     }
 
+    private fun initViewPager() {
+        viewPager = binding.viewPager
+        val viewPagerAdapter = LoginAdapter(this)
+        viewPager.adapter = viewPagerAdapter
+    }
+
     private fun checkTokenAndNavigate() {
-        val accessToken = SecurePrefs.getAccessToken(this)
+//        val accessToken = SecurePrefs.getAccessToken(this)
+        // accessToken dummy값 만들어주기
+        val accessToken = 1
         if (accessToken != null) {
             showOnBoardingFragment()
         } else {
-            showOnBoardingFragment()
-//            showLoginMainFragment()
+//            showOnBoardingFragment()
+            showLoginMainFragment()
         }
     }
 
     private fun showLoginMainFragment() {
-        supportFragmentManager.commit {
-            replace(R.id.frame_layout, LoginMainFragment())
-            setReorderingAllowed(true)
-        }
+//        supportFragmentManager.commit {
+//            replace(R.id.view_pager, LoginMainFragment())
+//            setReorderingAllowed(true)
+//        }
+        initViewPager()
     }
 
     fun showOnBoardingFragment() {
@@ -58,7 +71,7 @@ class LoginActivity : AppCompatActivity(), AuthFailureListener {
 
     override fun onAuthFailure() {
         supportFragmentManager.commit {
-            replace(R.id.frame_layout, LoginMainFragment())
+            replace(R.id.view_pager, LoginMainFragment())
             setReorderingAllowed(true)
         }
     }

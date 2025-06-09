@@ -19,8 +19,7 @@ class StoryActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-
-
+        setFragment(StoryEnterFragment())
     }
 
     fun setFragment(fragment: Fragment) {
