@@ -27,7 +27,14 @@ class HanselCorrectFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentHanselCorrectBinding.inflate(inflater, container, false)
 
-        checkAnswer()
+        val isCorrect = arguments?.getBoolean("isCorrect") ?: false
+
+        checkAnswer(isCorrect)
+
+        // next 버튼 누를 경우 결과 화면으로
+        binding.btnNext.setOnClickListener {
+            navigateToNextFragment(isCorrect)
+        }
 
         return binding.root
     }
@@ -42,11 +49,13 @@ class HanselCorrectFragment : Fragment() {
                 finish()
             }
         }
+
+
     }
 
     // 정답인지 아닌 지 확인하는 함수
-    private fun checkAnswer() {
-        val isCorrect = arguments?.getBoolean("isCorrect") ?: false
+    private fun checkAnswer(isCorrect: Boolean) {
+//        val isCorrect = arguments?.getBoolean("isCorrect") ?: false
         if (isCorrect){
             binding.isCorrectLayout.isSelected = true
         } else {
@@ -56,6 +65,19 @@ class HanselCorrectFragment : Fragment() {
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.incorrect))
             }
         }
+    }
+
+    // 정답을 bundle에 담아서 다음 프래그먼트에 전달
+    private fun navigateToNextFragment(isCorrect: Boolean) {
+        val nextFrags = HanselResultFragment()
+        val bundle = Bundle().apply {
+            putBoolean("isCorrect", isCorrect)
+        }
+        nextFrags.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.hansel_frame_layout, nextFrags)
+            .commit()
     }
 
     override fun onDestroy() {

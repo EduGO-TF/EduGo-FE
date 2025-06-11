@@ -1,6 +1,7 @@
 package com.example.edugo_fe.story
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,8 +20,8 @@ import com.example.edugo_fe.databinding.FragmentStoryEnterBinding
 class StoryEnterFragment : Fragment() {
     private var _binding: FragmentStoryEnterBinding? = null
     private val binding get() = _binding!!
-    private val storyImageList = listOf(R.drawable.hansel_and_gretel_story_image_1, R.drawable.hansel_and_gretel_story_image_2)
-    private val countImageList = listOf(R.drawable.count_1_3, R.drawable.count_2_3)
+    private val storyImageList = listOf(R.drawable.hansel_and_gretel_story_image_1, R.drawable.hansel_and_gretel_story_image_3, R.drawable.hansel_and_gretel_story_image_2)
+    private val countImageList = listOf(R.drawable.count_1_3, R.drawable.count_2_3, R.drawable.count_3_3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,22 +73,55 @@ class StoryEnterFragment : Fragment() {
         )
         popupWindow.showAtLocation(binding.root, android.view.Gravity.CENTER, 0, 0)
 
-        // next button 누를 경우
-        popupView.findViewById<ImageButton>(R.id.btn_story_next).setOnClickListener {
-            count += 1
-            popupView.findViewById<ImageView>(R.id.story_image).setImageResource(storyImageList[count])
-            popupView.findViewById<ImageView>(R.id.count_image).setImageResource(countImageList[count])
-            if (count == 1) {
-                popupView.findViewById<ImageButton>(R.id.btn_story_before).apply {
-                    count -= 1
-                    visibility = View.VISIBLE
-                    setOnClickListener {
-                        popupView.findViewById<ImageView>(R.id.story_image).setImageResource(storyImageList[count])
-                        popupView.findViewById<ImageView>(R.id.count_image).setImageResource(countImageList[count])
-                    }
+        val btnNext = popupView.findViewById<ImageButton>(R.id.btn_story_next)
+        val btnBefore = popupView.findViewById<ImageButton>(R.id.btn_story_before)
+        val storyImage = popupView.findViewById<ImageView>(R.id.story_image)
+        val countImage = popupView.findViewById<ImageView>(R.id.count_image)
+
+        // Before Button
+        btnBefore.setOnClickListener {
+            count -= 1
+            when(count){
+                0 -> {
+                    btnNext.visibility = View.VISIBLE
+                    btnBefore.visibility = View.INVISIBLE
+                    storyImage.setImageResource(storyImageList[count])
+                    countImage.setImageResource(countImageList[count])
+                }
+                1 -> {
+                    btnNext.visibility = View.VISIBLE
+                    btnBefore.visibility = View.VISIBLE
+                    storyImage.setImageResource(storyImageList[count])
+                    countImage.setImageResource(countImageList[count])
+                }
+                else -> {
+                    count = 0
                 }
             }
         }
+
+        // Next Button
+        btnNext.setOnClickListener {
+            count += 1
+            when(count){
+                1 -> {
+                    btnNext.visibility = View.VISIBLE
+                    btnBefore.visibility = View.VISIBLE
+                    storyImage.setImageResource(storyImageList[count])
+                    countImage.setImageResource(countImageList[count])
+                }
+                2 -> {
+                    btnNext.visibility = View.INVISIBLE
+                    btnBefore.visibility = View.VISIBLE
+                    storyImage.setImageResource(storyImageList[count])
+                    countImage.setImageResource(countImageList[count])
+                }
+                else -> {
+                    count = 2
+                }
+            }
+        }
+
 
         // 입장 버튼 누를 경우
         popupView.findViewById<ImageButton>(R.id.btn_main_question_enter).setOnClickListener {
