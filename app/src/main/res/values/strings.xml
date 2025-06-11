@@ -20,5 +20,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start_ment">이야기 속으로\n들어가 보아요</string>
     <string name="onboarding_ment">숲을 찾아보아요</string>
+    <string name="incorrect">오답이에요!</string>
 
 </resources>

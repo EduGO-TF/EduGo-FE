@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/is_correct_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Hansel_and_Gretel.HanselMainStartFragment"
+    android:background="@drawable/correct_layout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="60dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageView
+                android:id="@+id/count_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/count_1_2"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btn_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_exit_black"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="30sp"/>
+        <TextView
+            android:id="@+id/is_correct_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="정답이에요!"
+            android:textSize="20sp"
+            android:textColor="#00C153"
+            android:fontFamily="@font/pretendard_bold"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="해설  :\n✅  정답\n2. 과자 조각\n✏️  해설\n헨젤은 겁이 많은 동생을 안심시키기 위해 손을 잡았어요."
+            android:textSize="20sp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:layout_marginTop="40dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="그래서 ( )에는 ‘과자조각’이 들어가는 것이 가장 알맞아요."
+            android:textSize="20sp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:layout_marginBottom="40dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_orange_next"
+            android:text="다음으로"
+            android:textColor="@color/white"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="18sp"
+            android:elevation="0dp"
+            android:layout_marginHorizontal="10dp"/>
+
+
+    </LinearLayout>
+
+
+
+
+</FrameLayout>

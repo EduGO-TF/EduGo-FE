@@ -1,5 +1,6 @@
 package com.example.edugo_fe.story
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.edugo_fe.Hansel_and_Gretel.HanselMainActivity
 import com.example.edugo_fe.R
 import com.example.edugo_fe.databinding.FragmentStoryEnterBinding
 
@@ -70,6 +72,7 @@ class StoryEnterFragment : Fragment() {
         )
         popupWindow.showAtLocation(binding.root, android.view.Gravity.CENTER, 0, 0)
 
+        // next button 누를 경우
         popupView.findViewById<ImageButton>(R.id.btn_story_next).setOnClickListener {
             count += 1
             popupView.findViewById<ImageView>(R.id.story_image).setImageResource(storyImageList[count])
@@ -86,8 +89,17 @@ class StoryEnterFragment : Fragment() {
             }
         }
 
+        // 입장 버튼 누를 경우
+        popupView.findViewById<ImageButton>(R.id.btn_main_question_enter).setOnClickListener {
+            requireActivity().apply {
+                startActivity(Intent(requireContext(), HanselMainActivity::class.java))
+                finish()
+            }
+        }
+
         binding.storyModal.visibility = View.INVISIBLE
 
+        // 뒤로가기 해서 팝업이 사라질 경우
         popupWindow.setOnDismissListener {
             binding.storyModal.apply {
                 alpha = 0f // 투명도를 0으로 설정

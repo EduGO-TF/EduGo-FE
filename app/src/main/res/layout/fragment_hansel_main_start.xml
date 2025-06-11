@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Hansel_and_Gretel.HanselMainStartFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="60dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageView
+                android:id="@+id/count_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/count_1_2"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_exit_black"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Q"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="30sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="헨젤이 흘린 것의 정체는\n무엇일까요?"
+            android:textSize="30sp"
+            android:fontFamily="@font/pretendard_bold"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="진저가 앞으로 가야 할 방향을 헷갈리고 있어요"
+            android:textSize="14sp"
+            android:fontFamily="@font/pretendard_regular"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:src="@drawable/main_hansel_question1"
+            android:layout_marginHorizontal="55dp"
+            android:layout_marginTop="30dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_main_question_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_orange_next"
+            android:text="다음으로"
+            android:textColor="@color/white"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="18sp"
+            android:elevation="0dp"
+            android:layout_marginHorizontal="10dp"/>
+
+
+    </LinearLayout>
+
+
+
+
+</FrameLayout>
